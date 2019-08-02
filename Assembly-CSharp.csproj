@@ -75,6 +75,7 @@
     <Compile Include="Assets\Scripts\Player\fps_PlayerInventory.cs" />
     <Compile Include="Assets\Scripts\Player\fps_PlayerParameter.cs" />
     <Compile Include="Assets\Scripts\UI\FadeInOut.cs" />
+    <Compile Include="Assets\Scripts\UI\fps_Crosshair.cs" />
     <None Include="Assets\Top-Down SF\Origin\Tools\Self_illum_reflective.shader" />
     <None Include="Assets\Shaders\ReflectiveDiffuseSpecTransp.shader" />
     <None Include="Assets\Bleed\HowToUse.txt" />
