@@ -25,7 +25,7 @@ public class fps_FramesPerSecond : MonoBehaviour {
         else
         {
             timer = intervalDisplayTime;
-            txt.text = "FPS: " + Mathf.Floor(1 / Time.deltaTime);
+            txt.text = Mathf.Floor(1 / Time.deltaTime) + " FPS";
         }
 	}
 }

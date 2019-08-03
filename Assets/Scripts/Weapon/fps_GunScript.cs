@@ -13,6 +13,7 @@ public class fps_GunScript : MonoBehaviour {
     public float damage = 20;
     public float flashRate = 0.02f;
     public float validDistance = 200;
+    public float recoil = 2;   // 后坐力
 
     public AudioClip fireAudio;
     public AudioClip reloadAudio;
@@ -120,13 +121,19 @@ public class fps_GunScript : MonoBehaviour {
                 bulletText.text = currentBullet + "/" + currentChargerBullet;
                 AudioSource.PlayClipAtPoint(fireAudio, transform.position);
 
-                DamageEnemy();
-                if (PlayerShootEvent != null)
-                    PlayerShootEvent();
-
                 anim.Rewind(fireAnim);
                 anim.Play(fireAnim);
                 StartCoroutine("Flash");
+
+                // 简易制作的后坐力效果
+                float offsetX = Random.Range(-0.2f, 0.2f);
+                float offsetY = Random.Range(recoil - recoil / 8, recoil + recoil / 8);
+                parameter.inputSmoothLook.x += offsetX;
+                parameter.inputSmoothLook.y += offsetY;
+
+                DamageEnemy();
+                if (PlayerShootEvent != null)
+                    PlayerShootEvent();
             }
             nextFireTime = Time.time + fireRate;
         }
