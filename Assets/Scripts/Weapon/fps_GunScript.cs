@@ -14,6 +14,7 @@ public class fps_GunScript : MonoBehaviour {
     public float flashRate = 0.02f;
     public float validDistance = 200;
     public float recoil = 2;   // 后坐力
+    public GameObject bulletHole;
 
     public AudioClip fireAudio;
     public AudioClip reloadAudio;
@@ -39,6 +40,7 @@ public class fps_GunScript : MonoBehaviour {
     private int currentChargerBullet;
     private fps_PlayerParameter parameter;
     private fps_PlayerControl playerControl;
+    private fps_Crosshair crosshair;
 
     // Use this for initialization
     void Start () {
@@ -50,6 +52,7 @@ public class fps_GunScript : MonoBehaviour {
         flash = transform.Find("muzzle_flash").GetComponent<MeshRenderer>();
         parameter = GameObject.FindGameObjectWithTag(Tags.player).GetComponent<fps_PlayerParameter>();
         playerControl = GameObject.FindGameObjectWithTag(Tags.player).GetComponent<fps_PlayerControl>();
+        crosshair = GetComponentInParent<fps_Crosshair>();
 	}
 	
 	// Update is called once per frame
@@ -103,8 +106,10 @@ public class fps_GunScript : MonoBehaviour {
     private IEnumerator Flash()
     {
         flash.enabled = true;
+        crosshair.ZoomCrosshair(true);
         yield return new WaitForSeconds(flashRate);
         flash.enabled = false;
+        crosshair.ZoomCrosshair(false);
     }
 
     private void Fire()
@@ -125,11 +130,7 @@ public class fps_GunScript : MonoBehaviour {
                 anim.Play(fireAnim);
                 StartCoroutine("Flash");
 
-                // 简易制作的后坐力效果
-                float offsetX = Random.Range(-0.2f, 0.2f);
-                float offsetY = Random.Range(recoil - recoil / 8, recoil + recoil / 8);
-                parameter.inputSmoothLook.x += offsetX;
-                parameter.inputSmoothLook.y += offsetY;
+                Recoil();
 
                 DamageEnemy();
                 if (PlayerShootEvent != null)
@@ -137,6 +138,15 @@ public class fps_GunScript : MonoBehaviour {
             }
             nextFireTime = Time.time + fireRate;
         }
+    }
+
+    private void Recoil()
+    {
+        // 简易制作的后坐力效果
+        float offsetX = Random.Range(-0.2f, 0.2f);
+        float offsetY = Random.Range(recoil - recoil / 8, recoil + recoil / 8);
+        parameter.inputSmoothLook.x += offsetX;
+        parameter.inputSmoothLook.y += offsetY;
     }
 
     public void DamageEnemy()
@@ -149,6 +159,7 @@ public class fps_GunScript : MonoBehaviour {
             if (!hit.collider.CompareTag(Tags.enemy))
             {
                 Instantiate(explosion, hit.point + hit.normal * 0.01f, Quaternion.LookRotation(hit.normal));
+                Instantiate(bulletHole, hit.point + hit.normal * 0.01f, Quaternion.LookRotation(hit.normal));
             }
         }
     }
