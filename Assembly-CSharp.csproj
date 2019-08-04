@@ -62,11 +62,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Bleed\BleedBehavior.cs" />
+    <Compile Include="Assets\Scripts\Enemy\fps_EnemySight.cs" />
     <Compile Include="Assets\Scripts\Others\DoorControl.cs" />
     <Compile Include="Assets\Scripts\Others\fps_ExitTrigger.cs" />
     <Compile Include="Assets\Scripts\Others\fps_KeyPickUp.cs" />
     <Compile Include="Assets\Scripts\Others\fps_LaserDamage.cs" />
     <Compile Include="Assets\Scripts\Others\fps_ObjectPool.cs" />
+    <Compile Include="Assets\Scripts\Others\HashIDs.cs" />
     <Compile Include="Assets\Scripts\Others\Tags.cs" />
     <Compile Include="Assets\Scripts\Player\fps_FPCamera.cs" />
     <Compile Include="Assets\Scripts\Player\fps_FPInput.cs" />
