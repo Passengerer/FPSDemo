@@ -14,13 +14,15 @@ public class fps_GunScript : MonoBehaviour {
     public float flashRate = 0.02f;
     public float validDistance = 200;
     public float recoil = 2;   // 后坐力
-    public GameObject bulletHole;
+
+    // 弹痕和击中场景特效的对象池
+    public fps_ObjectPool bulletHolePool;
+    public fps_ObjectPool envExplosionEffectPool;
 
     public AudioClip fireAudio;
     public AudioClip reloadAudio;
     public AudioClip damageAudio;
     public AudioClip dryFireAudio;
-    public GameObject explosion;
     public Text bulletText;
 
     public int bulletCount = 30;
@@ -53,7 +55,7 @@ public class fps_GunScript : MonoBehaviour {
         parameter = GameObject.FindGameObjectWithTag(Tags.player).GetComponent<fps_PlayerParameter>();
         playerControl = GameObject.FindGameObjectWithTag(Tags.player).GetComponent<fps_PlayerControl>();
         crosshair = GetComponentInParent<fps_Crosshair>();
-	}
+    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -158,8 +160,14 @@ public class fps_GunScript : MonoBehaviour {
         {
             if (!hit.collider.CompareTag(Tags.enemy))
             {
-                Instantiate(explosion, hit.point + hit.normal * 0.01f, Quaternion.LookRotation(hit.normal));
-                Instantiate(bulletHole, hit.point + hit.normal * 0.01f, Quaternion.LookRotation(hit.normal));
+                GameObject bulletHole = bulletHolePool.Get();
+                bulletHole.transform.position = hit.point + hit.normal * 0.01f;
+                bulletHole.transform.rotation = Quaternion.LookRotation(hit.normal);
+                bulletHole.transform.SetParent(hit.transform);
+
+                GameObject explosion = envExplosionEffectPool.Get();
+                explosion.transform.position = hit.point + hit.normal * 0.01f;
+                explosion.transform.rotation = Quaternion.LookRotation(hit.normal);
             }
         }
     }
@@ -181,7 +189,7 @@ public class fps_GunScript : MonoBehaviour {
                 PlayerStateAnim(idleAnim);
                 break;
             case PlayerState.Crouch:
-                PlayerStateAnim(walkAnim);
+                PlayerStateAnim(idleAnim);
                 break;
             case PlayerState.Walk:
                 PlayerStateAnim(walkAnim);
