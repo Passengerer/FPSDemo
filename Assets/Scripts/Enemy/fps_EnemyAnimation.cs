@@ -23,8 +23,9 @@ public class fps_EnemyAnimation : MonoBehaviour {
         anim = GetComponent<Animator>();
         animSetup = new AnimatorSetup(anim, hash);
 
-        anim.SetLayerWeight(1, 1);
-        anim.SetLayerWeight(2, 1);
+        nav.updateRotation = false;
+        anim.SetLayerWeight(1, 1f);
+        anim.SetLayerWeight(2, 1f);
 
         deadZone *= Mathf.Deg2Rad;
     }

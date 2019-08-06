@@ -19,6 +19,7 @@ public class fps_GunScript : MonoBehaviour {
     public fps_ObjectPool bulletHolePool;
     public fps_ObjectPool envExplosionEffectPool;
 
+    public GameObject explosion;
     public AudioClip fireAudio;
     public AudioClip reloadAudio;
     public AudioClip damageAudio;
@@ -32,7 +33,6 @@ public class fps_GunScript : MonoBehaviour {
     private string reloadAnim = "Reload";
     private string walkAnim = "Walk";
     private string runAnim = "Run";
-    private string jumpAnim = "Jump";
     private string idleAnim = "Idle";
 
     private Animation anim;
@@ -155,11 +155,11 @@ public class fps_GunScript : MonoBehaviour {
     {
         RaycastHit hit;
         Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2));
-
+        
         if (Physics.Raycast(ray, out hit, validDistance))
         {
             if (!hit.collider.CompareTag(Tags.enemy))
-            {
+            {               
                 GameObject bulletHole = bulletHolePool.Get();
                 bulletHole.transform.position = hit.point + hit.normal * 0.01f;
                 bulletHole.transform.rotation = Quaternion.LookRotation(hit.normal);
@@ -168,6 +168,12 @@ public class fps_GunScript : MonoBehaviour {
                 GameObject explosion = envExplosionEffectPool.Get();
                 explosion.transform.position = hit.point + hit.normal * 0.01f;
                 explosion.transform.rotation = Quaternion.LookRotation(hit.normal);
+            }
+            else
+            {
+                Instantiate(explosion, hit.point + hit.normal * 0.01f, Quaternion.LookRotation(hit.normal));
+                AudioSource.PlayClipAtPoint(damageAudio, hit.point);
+                hit.collider.GetComponent<fps_EnemyHealth>().TakeDamage(damage);
             }
         }
     }
