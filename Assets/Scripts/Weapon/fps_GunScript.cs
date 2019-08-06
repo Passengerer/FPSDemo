@@ -44,6 +44,9 @@ public class fps_GunScript : MonoBehaviour {
     private fps_PlayerControl playerControl;
     private fps_Crosshair crosshair;
 
+    // 定义一个玩家层，防止子弹打中自身碰撞器
+    private LayerMask exceptPlayerMask;
+
     // Use this for initialization
     void Start () {
         currentBullet = bulletCount;
@@ -55,6 +58,10 @@ public class fps_GunScript : MonoBehaviour {
         parameter = GameObject.FindGameObjectWithTag(Tags.player).GetComponent<fps_PlayerParameter>();
         playerControl = GameObject.FindGameObjectWithTag(Tags.player).GetComponent<fps_PlayerControl>();
         crosshair = GetComponentInParent<fps_Crosshair>();
+
+        exceptPlayerMask = 1 << 10;     // 此处第10层为Player层
+        exceptPlayerMask = exceptPlayerMask + (1 << 2); // 第2层为Ignore Raycast
+        exceptPlayerMask = ~exceptPlayerMask;   // 取反，不检测玩家自身和Ignore Raycast层
     }
 	
 	// Update is called once per frame
@@ -156,7 +163,7 @@ public class fps_GunScript : MonoBehaviour {
         RaycastHit hit;
         Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2));
         
-        if (Physics.Raycast(ray, out hit, validDistance))
+        if (Physics.Raycast(ray, out hit, validDistance, exceptPlayerMask))
         {
             if (!hit.collider.CompareTag(Tags.enemy))
             {               
