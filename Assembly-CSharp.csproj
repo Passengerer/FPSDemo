@@ -62,6 +62,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Bleed\BleedBehavior.cs" />
+    <Compile Include="Assets\Scripts\Enemy\AnimatorSetup.cs" />
+    <Compile Include="Assets\Scripts\Enemy\fps_EnemyAnimation.cs" />
     <Compile Include="Assets\Scripts\Enemy\fps_EnemySight.cs" />
     <Compile Include="Assets\Scripts\Others\DoorControl.cs" />
     <Compile Include="Assets\Scripts\Others\fps_ExitTrigger.cs" />

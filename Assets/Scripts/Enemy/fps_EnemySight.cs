@@ -7,10 +7,9 @@ public class fps_EnemySight : MonoBehaviour {
 
     public float fieldOfViewAngle = 110;
     public float distance = 25;
+    public bool playerInSight;
 
-    private bool playerInSight;
     private Vector3 resetPosition = Vector3.zero;
-    private NavMeshAgent nav;
     private Transform playerTF;
     private fps_PlayerHealth playerHealth;
     private fps_PlayerControl playerControl;
@@ -19,12 +18,11 @@ public class fps_EnemySight : MonoBehaviour {
 
     private void Start()
     {
-        nav = GetComponent<NavMeshAgent>();
         playerTF = GameObject.FindGameObjectWithTag(Tags.player).transform;
         playerHealth = playerTF.GetComponent<fps_PlayerHealth>();
         playerControl = playerTF.GetComponent<fps_PlayerControl>();
         anim = GetComponent<Animator>();
-        hash = new HashIDs();
+        hash = GameObject.FindGameObjectWithTag(Tags.gameController).GetComponent<HashIDs>();
 
         fps_GunScript.PlayerShootEvent += ListernPlayer;
     }
